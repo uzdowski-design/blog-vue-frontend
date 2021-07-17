@@ -9,6 +9,7 @@ const baseURL = process.env.VUE_APP_BASE_URL;
 
 export default new Vuex.Store({
   state: {
+    isAuthenticated: false,
     URL: baseURL,
     appTitle: process.env.VUE_APP_TITLE,
     posts: [
@@ -52,8 +53,17 @@ export default new Vuex.Store({
       }
     ]
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    TOGGLE_LOGIN(state) {
+      state.isAuthenticated = !state.isAuthenticated;
+      console.log('User Authenticated: ' + state.isAuthenticated)
+    }
+  },
+  actions: {
+    async toggleLogin({ commit }) {
+      commit('TOGGLE_LOGIN');
+    }
+  },
   getters: {}
 })
 
