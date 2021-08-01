@@ -15,10 +15,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn color="primary" @click="toggleLogin" v-if="!isAuthenticated"
+      <!-- <v-btn color="primary" @click="toggleLogin" v-if="!isAuthenticated"
         >Log In</v-btn
+      > -->
+      <login-dialog v-if="!$store.state.username" class="mt-2 ml-auto" />
+      <v-btn color="normal" @click="logout" v-else class="mt-2 ml-auto"
+        >Log Out</v-btn
       >
-      <v-btn color="normal" @click="toggleLogin" v-else>Log Out</v-btn>
     </v-app-bar>
     <router-view />
   </v-app>
@@ -27,12 +30,16 @@
 <script>
 export default {
   data: () => ({}),
+  components: {
+    "login-dialog": require("@/components/Global/Dialogs/DialogLogin.vue")
+      .default,
+  },
   methods: {
     getAppTitle() {
       return process.env.VUE_APP_TITLE;
     },
-    toggleLogin() {
-      this.$store.dispatch("toggleLogin");
+    logout() {
+      this.$store.commit("USER_LOGOUT");
     },
   },
   computed: {

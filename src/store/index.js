@@ -6,62 +6,69 @@ import axios from "axios";
 Vue.use(Vuex)
 
 const baseURL = process.env.VUE_APP_BASE_URL;
+const postsURL = process.env.VUE_APP_POSTS_URL;
+const accessTokenURL = process.env.VUE_APP_ACCESS_TOKEN_URL;
+const refreshTokenURL = process.env.VUE_APP_REFRESH_TOKEN_URL;
+
+
+
 
 export default new Vuex.Store({
   state: {
+    username: null,
+    accessToken: null,
+    refreshToken: null,
     isAuthenticated: false,
-    URL: baseURL,
     appTitle: process.env.VUE_APP_TITLE,
-    posts: [
-      {
-        "id": 1,
-        "url": "http://127.0.0.1:8000/posts/1/",
-        "title": "New player for Real Madrit",
-        "abstract": "asdasdsaaaaaaaaaaaaaaaaaaaaaaaaaaasdasd",
-        "body": "asfasdassssssssssssssssssssssssssssssssssssssa",
-        "created_date": "2021-07-17",
-        "author": 1,
-        "tags": [
-          {
-            "id": 1,
-            "name": "sport"
-          },
-          {
-            "id": 2,
-            "name": "football"
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "url": "http://127.0.0.1:8000/posts/2/",
-        "title": "post 2",
-        "abstract": "asdassaaaaa",
-        "body": "asdsadsadsadsadasd",
-        "created_date": "2021-07-17T14:25:09Z",
-        "author": 1,
-        "tags": [
-          {
-            "id": 2,
-            "name": "football"
-          },
-          {
-            "id": 3,
-            "name": "food"
-          }
-        ]
-      }
-    ]
+    posts: [],
+    currentPost: null
   },
   mutations: {
     TOGGLE_LOGIN(state) {
       state.isAuthenticated = !state.isAuthenticated;
       console.log('User Authenticated: ' + state.isAuthenticated)
+    },
+    SET_POSTS(state, posts) {
+      state.posts = posts;
+    },
+    USER_LOGIN(state, { access, refresh, username }) {
+      state.accessToken = access;
+      state.refreshToken = refresh;
+      state.username = username;
+      state.isAuthenticated = true;
+    },
+    USER_LOGOUT(state) {
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.username = null;
+      state.isAuthenticated = false
+    },
+    SET_POST(state, data) {
+      state.currentPost = data;
     }
   },
   actions: {
     async toggleLogin({ commit }) {
       commit('TOGGLE_LOGIN');
+    },
+    async fetchPosts({ commit }) {
+      const res = await axios.get(postsURL);
+      commit('SET_POSTS', res.data);
+    },
+    async userLogin({ commit }, data) {
+      const payload = {
+        username: data.username,
+        password: data.password
+      }
+      const res = await axios.post(accessTokenURL, payload)
+      const outputData = res.data;
+      outputData["username"] = data.username;
+      commit('USER_LOGIN', outputData)
+    },
+    async fetchPost({ commit }, data) {
+      const res = await axios.get(postsURL + data.id);
+      commit('SET_POST', res.data)
+      console.log(res.data)
     }
   },
   getters: {}

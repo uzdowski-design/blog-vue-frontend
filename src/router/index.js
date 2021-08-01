@@ -2,21 +2,22 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router'
 import Posts from '../views/Posts.vue'
+import Post from '../views/Post.vue'
 import goto from 'vuetify/es5/services/goto'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
   {
     path: '/',
     name: 'Posts',
     component: Posts
   },
+  {
+    path: '/posts/:id',
+    name: 'Post',
+    component: Post
+  }
 ]
 
 const router = new VueRouter({
