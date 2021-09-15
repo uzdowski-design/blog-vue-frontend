@@ -6,7 +6,16 @@
           <v-card shaped height="250">
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>
-              by {{ post.author.first_name + " " + post.author.last_name }}
+              by
+              {{
+                post.author.first_name +
+                " " +
+                post.author.last_name +
+                " " +
+                "(" +
+                post.author.username +
+                ")"
+              }}
             </v-card-subtitle>
             <v-card-text>{{ post.abstract }}</v-card-text>
             <v-row class="tags mx-1">

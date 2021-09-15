@@ -4,10 +4,20 @@
       <v-row justify="center">
         <v-card class="mt-5" shaped width="90%">
           <v-card-title>{{ post.title || "" }}</v-card-title>
-          <v-card-subtitle>
-            by {{ post.author.first_name + " " + post.author.last_name }}
+          <v-card-subtitle class="username">
+            by
+            {{
+              post.author.first_name +
+              " " +
+              post.author.last_name +
+              " " +
+              "(" +
+              post.author.username +
+              ")"
+            }}
           </v-card-subtitle>
           <v-card-text>{{ post.body }}</v-card-text>
+          <v-card-text class="ml-1 mt-5">Tags</v-card-text>
           <v-row class="tags mx-1">
             <div v-for="tag in post.tags" :key="tag.id">
               <v-card-text>
@@ -47,3 +57,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.username
+  font-style: italic
+</style>
